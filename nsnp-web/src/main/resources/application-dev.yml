@@ -1,0 +1,40 @@
+server:
+  port: 9004
+spring:
+  application:
+    name: nsnp-web
+  rabbitmq:
+    host: 121.5.26.33
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:6868/eureka/
+  instance:
+    prefer-ip-adress: ture
+jwt:
+  config:
+    key: nsnp
+    ttl: 36000000
+zuul:
+  routes:
+    nsnp-base:
+      path: /base/**
+      serviceId: nsnp-base
+    nsnp-article:
+      path: /article/**
+      serviceId: nsnp-article
+    nsnp-friend:
+      path: /friend/**
+      serviceId: nsnp-friend
+    nsnp-manager:
+      path: /manager/**
+      serviceId: nsnp-manager
+    nsnp-user:
+      path: /user/**
+      serviceId: nsnp-user
+    nsnp-web:
+      path: /web/**
+      serviceId: nsnp-web
+#    nsnp-chat:
+#      path: /chat/**
+#      serviceId: nsnp-chat

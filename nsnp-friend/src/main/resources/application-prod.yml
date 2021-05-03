@@ -1,0 +1,24 @@
+server:
+  port: 9005
+spring:
+  application:
+    name: nsnp-friend
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://121.5.26.33:3306/itaobaob_friend?serverTimezone=UTC
+    username: root
+    password: 123456.sql
+  jpa:
+    database: MySQL
+    show-sql: true
+  rabbitmq:
+    host: 121.5.26.33
+jwt:
+  config:
+    key: itaobao
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:6868/eureka/
+  instance:
+    prefer-ip-adress: ture

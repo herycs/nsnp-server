@@ -1,0 +1,41 @@
+server:
+  port: 9012
+spring:
+  application:
+    name: nsnp-user
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://122.51.8.208:3306/itaobaob_user?serverTimezone=UTC&useSSL=false
+    username: root
+    password: 123456.sql
+  jpa:
+    database: MySQL
+    show-sql: true
+  redis:
+    host: 121.5.26.33
+  rabbitmq:
+    host: 121.5.26.33
+  security:
+    user:
+      name: admin
+      password: 123456
+      role: ADMIN
+jwt:
+  config:
+    key: itaobao
+    ttl: 36000000
+
+aliyun:
+  sms:
+    accessKeyId: LTAI4GEfj8QsJ69EY4eWHhgU
+    accessKeySecret: 7IgCNEvw1G1khyKvaRnGmFK0qvUxvA
+    template_code: SMS_191801331
+    sign_name: IS商城
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://122.51.8.208:6868/eureka/
+  instance:
+    prefer-ip-adress: ture

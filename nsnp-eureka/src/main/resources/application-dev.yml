@@ -1,0 +1,14 @@
+server:
+  port: 6868
+spring:
+  rabbitmq:
+    host: 121.5.26.33
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:${server.port}/eureka/

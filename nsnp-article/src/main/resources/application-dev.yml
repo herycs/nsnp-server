@@ -1,0 +1,31 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: nsnp-article
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/itaobaob_article?serverTimezone=UTC
+    username: root
+    password: 123456.sql
+  jpa:
+    database: MySQL
+    show-sql: true
+  redis:
+    host: 121.5.26.33
+  rabbitmq:
+    host: 121.5.26.33
+  mvc:
+    static-path-pattern: /img/**
+  resources:
+      static-locations: file:${web.upload-path}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:6868/eureka/
+  instance:
+    prefer-ip-adress: ture
+
+web:
+  upload-path: D:/upload/
