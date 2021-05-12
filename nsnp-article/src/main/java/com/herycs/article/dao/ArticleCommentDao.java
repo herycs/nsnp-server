@@ -2,6 +2,8 @@ package com.herycs.article.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import com.herycs.article.pojo.ArticleComment;
 
@@ -16,4 +18,6 @@ import java.util.List;
  **/
 public interface ArticleCommentDao extends JpaRepository<ArticleComment,String>,JpaSpecificationExecutor<ArticleComment> {
     List<ArticleComment> findByArticleid(String articleid);
+
+    List<ArticleComment> findByUidOrderByCtimeDesc(String uid);
 }

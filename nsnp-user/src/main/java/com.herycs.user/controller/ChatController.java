@@ -35,6 +35,10 @@ public class ChatController {
     @Autowired
     private MessageService messageService;
 
+    private static final String MESSAGE_TYPE_NOTICE = "TO_PUBLIC";
+
+    private static final String MESSAGE_TYPE_USER = "TO_USER";
+
     @RequestMapping(value = "/record/{uid}/{receptorId}", method = RequestMethod.GET)
     public Result getRecordByUser(@PathVariable("uid") String uid, @PathVariable("receptorId") String receptorId) {
 
@@ -59,6 +63,40 @@ public class ChatController {
         return new Result(true, StatusCode.OK, "获取成功", resList);
     }
 
+    @RequestMapping(value = "/list/notice/{uid}", method = RequestMethod.GET)
+    public Result getNotice(@PathVariable("uid") String uid) {
+
+        List<String> allReceptor = messageService.getAllSender(uid);
+
+        logger.info("{}", allReceptor);
+
+        List<Map> resList = new ArrayList<>();
+
+        allReceptor.forEach(item -> {
+
+            HashMap<String, String> chatInfoMap = new HashMap<>();
+
+            User userInfo = userService.findById(item);
+
+
+            chatInfoMap.put("uid", userInfo.getId());
+            chatInfoMap.put("username", userInfo.getNickname());
+            chatInfoMap.put("summary", userInfo.getInterest());
+            chatInfoMap.put("avatar", userInfo.getAvatar());
+            Message lastMessage = messageService.getSystemNotice(uid, MESSAGE_TYPE_NOTICE);
+            if (lastMessage != null) {
+                chatInfoMap.put("lastMessage", lastMessage.getMsg());
+                chatInfoMap.put("time", lastMessage.getTime());
+            }
+
+            resList.add(chatInfoMap);
+
+        });
+
+        return new Result(true, StatusCode.OK, "获取成功", resList);
+
+    }
+
     @RequestMapping(value = "/list/{uid}", method = RequestMethod.GET)
     public Result getAllReceptors(@PathVariable("uid") String uid) {
 
@@ -79,9 +117,11 @@ public class ChatController {
             chatInfoMap.put("username", userInfo.getNickname());
             chatInfoMap.put("summary", userInfo.getInterest());
             chatInfoMap.put("avatar", userInfo.getAvatar());
-            Message lastMessage = messageService.getLastMessage(uid, item);
-            chatInfoMap.put("lastMessage", lastMessage.getMsg());
-            chatInfoMap.put("time", lastMessage.getTime());
+            Message lastMessage = messageService.getLastMessage(uid, item, MESSAGE_TYPE_USER);
+            if (lastMessage != null) {
+                chatInfoMap.put("lastMessage", lastMessage.getMsg());
+                chatInfoMap.put("time", lastMessage.getTime());
+            }
 
             resList.add(chatInfoMap);
 

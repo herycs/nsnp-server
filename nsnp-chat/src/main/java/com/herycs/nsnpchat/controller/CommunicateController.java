@@ -32,34 +32,47 @@ public class CommunicateController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    private static final String MESSAGE_TYPE_NOTICE = "TO_PUBLIC";
+
+    private static final String MESSAGE_TYPE_USER = "TO_USER";
+
+
     @MessageMapping("/all")
     @SendTo("/topic/public")
     public MessageDto broadCast(@Payload MessageDto messageDto) {
 
         logger.info("to broadCast, {}", messageDto);
+
+        messageDto.setType(MESSAGE_TYPE_NOTICE);
+
         messageService.addRecord(messageDto);
 
         return new MessageDto("public", "广播消息");
     }
 
+
+    @MessageMapping("/chat")
+    public void toUser(@Payload MessageDto messageDto) {
+
+        messageDto.setType(MESSAGE_TYPE_USER);
+
+        messageService.addRecord(messageDto);
+        logger.info("{}", messageDto);
+
+        messagingTemplate.convertAndSend("/queue/" + messageDto.getReceptor(), messageDto);
+    }
+
+
     @MessageMapping("/room")
     public void toRoom(@Payload MessageDto messageDto) {
 
         logger.info("to public {}", messageDto);
+        messageDto.setType("TO_ROOM");
 
         messageService.addRecord(messageDto);
         MessageDto m = new MessageDto("public", "来自群聊的消息");
 
         messagingTemplate.convertAndSend("/topic/room/" + messageDto.getReceptor(), m);
     }
-
-    @MessageMapping("/chat")
-    public void toUser(@Payload MessageDto messageDto) {
-
-        messageService.addRecord(messageDto);
-        logger.info("{}", messageDto);
-        messagingTemplate.convertAndSend("/topic/user/" + messageDto.getReceptor(), messageDto);
-    }
-
 
 }

@@ -40,4 +40,8 @@ public class ArticleCommentService {
         articleCommentDao.save(articleComment);
     }
 
+    public List<ArticleComment> findUserComment(String uid) {
+        return articleCommentDao.findByUidOrderByCtimeDesc(uid);
+    }
+
 }

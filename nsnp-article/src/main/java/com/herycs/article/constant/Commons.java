@@ -26,5 +26,8 @@ public class Commons {
     public static final int ARTICLE_POR_DOWN = 0;
     public static final int ARTICLE_POR_DISLIK = 0;
 
+    public static final String ARTICLE_TYPE_LIFE = "1";
+    public static final String ARTICLE_TYPE_GROUP = "2";
+
 
 }

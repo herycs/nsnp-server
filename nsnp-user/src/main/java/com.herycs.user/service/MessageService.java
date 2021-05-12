@@ -38,14 +38,21 @@ public class MessageService {
         return messageDao.findByUserAndReceptor(uid, receptorId, 20);
     }
 
+    public List<String> getAllSender(String uid) {
+        return messageDao.findAllSender(uid);
+    }
+
     public List<String> getAllReceptor(String uid) {
         return messageDao.findAllReceptor(uid);
     }
 
-    public Message getLastMessage(String uid, String receptor) {
-        return messageDao.findLastMessage(uid, receptor);
+    public Message getLastMessage(String uid, String receptor, String type) {
+        return messageDao.findLastMessage(uid, receptor, type);
     }
 
+    public Message getSystemNotice(String uid, String type) {
+        return messageDao.findLastNotice(uid, type);
+    }
 
     private String currTime() {
         return format.format(System.currentTimeMillis());

@@ -1,5 +1,7 @@
 package com.herycs.article.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.herycs.article.constant.Commons;
 import com.herycs.article.dao.ArticleDao;
 import com.herycs.article.pojo.Article;
 import com.herycs.common.util.IdWorker;
@@ -32,6 +35,8 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 public class ArticleService {
 
+    private static Logger logger = LoggerFactory.getLogger(ArticleService.class);
+
     @Autowired
     private ArticleDao articleDao;
 
@@ -54,7 +59,41 @@ public class ArticleService {
 
 
     public List<Article> getRecommand(String channelId) {
-        return articleDao.findByChannelid(channelId);
+        return articleDao.findByColumnid(channelId);
+    }
+
+    public List<Article> getLifeRecommend(List<String> columnId, String channelId) {
+
+        List<Article> resList = new ArrayList<>();
+
+        for (int i = 0; i < columnId.size(); i++) {
+
+            List<Article> lifeArticle = articleDao.findLifeArticle(channelId, columnId.get(i));
+
+            resList.addAll(Optional.ofNullable(lifeArticle).map(list -> list.subList(0, Math.min(6, list.size()))).orElse(null));
+        }
+
+        return resList;
+    }
+
+    // 娱乐
+    public List<Article> getHappyList(String channelid) {
+        return articleDao.getHappyList(channelid,6);
+    }
+
+    // 点赞热帖
+    public List<Article> getHotList() {
+        return articleDao.getHot(6);
+    }
+
+    // 用户原创帖
+    public int getUserArticle(String uid) {
+        return articleDao.getUserWriteArticleNum(uid);
+    }
+
+    // 点赞大于50的帖子
+    public int getLargetFifty(String uid) {
+        return articleDao.getLargerThanFiftyArticle(uid);
     }
 
     /**
@@ -100,18 +139,31 @@ public class ArticleService {
      * @return
      */
     public Article findById(String id) {
+
         //先从缓存中拿数据
-        Article article = (Article) redisTemplate.opsForValue().get("article_" + id);
+        Article article = null;
+        try {
+             article = (Article) redisTemplate.opsForValue().get("article_" + id);
+        } catch (Exception e) {
+            logger.info("ArticleService 144 line, redis:操作异常");
+        }
         //如果拿不到，就去数据库中查询
         if (article == null) {
 
-            article = Optional.ofNullable(articleDao.findById(id))
-                    .map(item -> item.get())
-                    .orElse(null);
+            logger.info("aid:{}", id);
+            article = articleDao.findById(id).get();
             //放入缓存中
             redisTemplate.opsForValue().set("article_" + id, article, 20, TimeUnit.SECONDS);
         }
         return article;
+    }
+
+    public List<Article> findByUid(String uid) {
+        return articleDao.findByUseridOrderByUpdatetimeDesc(uid);
+    }
+
+    public List<Article> findLifeRecordByUser(String uid, String chanelid) {
+        return articleDao.findByUseridAndChannelid(uid, chanelid);
     }
 
     /**
@@ -213,6 +265,14 @@ public class ArticleService {
             }
         };
 
+    }
+
+    public List<Article> findByGroupId(String id) {
+        return articleDao.findGroupArticle(id);
+    }
+
+    public List<Article> findHotByGroupId(String id) {
+        return articleDao.findHotByGroupId(id);
     }
 
 }

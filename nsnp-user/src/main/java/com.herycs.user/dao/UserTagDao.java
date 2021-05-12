@@ -2,6 +2,8 @@ package com.herycs.user.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import com.herycs.user.pojo.UserTag;
 
@@ -16,7 +18,9 @@ import java.util.List;
  **/
 public interface UserTagDao extends JpaRepository<UserTag,String>, JpaSpecificationExecutor<UserTag> {
 
-    List<UserTag> findByUidOrderByScoreDesc(String uid);
+    @Modifying
+    @Query(value = "select * from tb_tag where uid=? and state>0 order by score desc", nativeQuery = true)
+    List<UserTag> findByUid(String uid);
 
-    UserTag findByTagAndUid(String tag, String uid);
+    UserTag findByColumnidAndUid(String tag, String uid);
 }

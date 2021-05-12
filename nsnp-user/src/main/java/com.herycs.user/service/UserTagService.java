@@ -26,22 +26,22 @@ public class UserTagService {
     private IdWorker idWorker;
 
     public List<UserTag> findUserTags(String uid) {
-        return userTagDao.findByUidOrderByScoreDesc(uid);
+        return userTagDao.findByUid(uid);
     }
 
     // 获取用户标签集合
     public UserTag findByTag(String tag, String uid) {
-        return userTagDao.findByTagAndUid(tag, uid);
+        return userTagDao.findByColumnidAndUid(tag, uid);
     }
 
     // 添加新标签
-    public void addTag(String uid, String tag) {
+    public void addTag(String uid, String columnId) {
 
         UserTag userTag = new UserTag();
 
         userTag.setUid(uid);
         userTag.setId(idWorker.nextId() + "");
-        userTag.setTag(tag);
+        userTag.setColumnid(columnId);
         userTag.setScore(1);
         userTag.setState("1");
 
@@ -51,7 +51,7 @@ public class UserTagService {
     // 更新标签比重
     public void update(String uid, String tag, int opr) {
 
-        UserTag userTag = userTagDao.findByTagAndUid(tag, uid);
+        UserTag userTag = userTagDao.findByColumnidAndUid(tag, uid);
 
         if (userTag == null) {
             return;

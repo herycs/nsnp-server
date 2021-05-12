@@ -3,6 +3,7 @@ package com.herycs.article.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.herycs.article.constant.Commons;
 import com.herycs.article.dao.LogDao;
 import com.herycs.article.pojo.Article;
 import com.herycs.article.pojo.Log;
@@ -22,20 +23,22 @@ public class LogService {
     @Autowired
     private LogDao logDao;
 
-    public void addLog(Article article) {
+    public void addVisit(String uid, Article article) {
 
         Log log = new Log();
 
+        log.setUid(uid);
         log.setAid(article.getId());
         log.setColumnid(article.getColumnid());
         log.setChannelid(article.getColumnid());
         log.setTime(System.currentTimeMillis());
+        log.setType(Commons.ARTICLE_POR_VISIT);
 
         logDao.save(log);
     }
 
-    public List<Log> findByUid(String uid) {
-        return logDao.findByUid(uid);
+    public List<Log> findByUid(String uid, int type) {
+        return logDao.findByUidAndTypeOrderByTimeDesc(uid, type);
     }
 
 }

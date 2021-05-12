@@ -21,21 +21,20 @@ public class UserTag implements Serializable {
     @Id
     private String id;
     private String uid;
-    private String tag;
+    private String columnid;
     private float score;
     private String state;
 
     public UserTag() {
     }
 
-    public UserTag(String id, String uid, String tag, float score, String state) {
+    public UserTag(String id, String uid, String columnid, float score, String state) {
         this.id = id;
         this.uid = uid;
-        this.tag = tag;
+        this.columnid = columnid;
         this.score = score;
         this.state = state;
     }
-
 
     public String getId() {
         return id;
@@ -53,12 +52,12 @@ public class UserTag implements Serializable {
         this.uid = uid;
     }
 
-    public String getTag() {
-        return tag;
+    public String getColumnid() {
+        return columnid;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setColumnid(String columnid) {
+        this.columnid = columnid;
     }
 
     public float getScore() {

@@ -22,7 +22,16 @@ public interface MessageDao extends JpaRepository<Message, String> {
     @Query(value = "select receptor from tb_record where sender=? group by receptor", nativeQuery = true)
     List<String> findAllReceptor(String uid);
 
-    @Query(value = "select * from tb_record where sender=? and receptor=? order by time desc limit 1", nativeQuery = true)
-    Message findLastMessage(String uid, String receptor);
+    @Query(value = "select receptor from tb_record where receptor=? group by sender", nativeQuery = true)
+    List<String> findAllSender(String uid);
+
+    @Query(value = "select * from tb_record where sender=? and receptor=? and type=? order by time desc limit 1", nativeQuery = true)
+    Message findLastMessage(String uid, String receptor, String type);
+
+    @Query(value = "select * from tb_record where receptor=? and type=? order by time desc limit 1", nativeQuery = true)
+    Message findLastNotice(String receptor, String type);
+
+    @Query(value = "select * from tb_record where receptor=? and type=?", nativeQuery = true)
+    List<Message> findAllSystemNotice(String receptor, String type);
 
 }

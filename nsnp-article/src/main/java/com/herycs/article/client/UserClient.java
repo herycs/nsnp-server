@@ -21,13 +21,13 @@ import java.util.List;
 @FeignClient("nsnp-user")
 public interface UserClient {
 
-    @RequestMapping(value="/user/{id}",method= RequestMethod.GET)
-    Result getUserInfoById(@PathVariable("id") String id) ;
+    @RequestMapping(value="/user/info/{id}",method= RequestMethod.GET)
+    Result findById(@PathVariable("id") String id) ;
 
-    @RequestMapping(value = "/user/utags/{uid}")
-    List<String> getUserTags(@PathVariable("uid") String uid);
+    @RequestMapping(value = "/tag/{uid}", method = RequestMethod.GET)
+    List<String> getUserTag(@PathVariable("uid") String uid);
 
-    @RequestMapping(value = "/user/tag/{uid}/{opr}/{tag}", method = RequestMethod.GET)
+    @RequestMapping(value = "/tag/{uid}/{opr}/{tag}", method = RequestMethod.GET)
     public void updateTag(@PathVariable("uid") String uid, @PathVariable("tag") String tag, @PathVariable("opr") int opr);
 
 }

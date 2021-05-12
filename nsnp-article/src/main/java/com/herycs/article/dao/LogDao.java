@@ -16,6 +16,6 @@ import java.util.List;
  **/
 public interface LogDao extends JpaRepository<Log,String>, JpaSpecificationExecutor<Log> {
 
-    public List<Log> findByUid(String uid);
+    public List<Log> findByUidAndTypeOrderByTimeDesc(String uid, int type);
 
 }
