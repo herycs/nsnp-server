@@ -71,13 +71,13 @@ public class FriendController {
     @RequestMapping(value = "/add/{uid}/{friendId}", method = RequestMethod.GET)
     public Result addFriend(@PathVariable("uid") String uid, @PathVariable("friendId") String friendId) {
         friendService.updateFriend(uid, friendId, 1);
-        return new Result(true, StatusCode.OK, "获取好友列表成功");
+        return new Result(true, StatusCode.OK, "添加好友成功");
     }
 
     @RequestMapping(value = "/del/{uid}/{friendId}", method = RequestMethod.GET)
     public Result deleteFriend(@PathVariable("uid") String uid, @PathVariable("friendId") String friendId) {
         friendService.updateFriend(uid, friendId, 0);
-        return new Result(true, StatusCode.OK, "获取好友列表成功");
+        return new Result(true, StatusCode.OK, "移除好友列表成功");
     }
 
 }

@@ -24,18 +24,25 @@ public class CollectService {
     private CollectDao collectDao;
 
     public List<Collect> findByUid(String uid) {
-       return collectDao.findByUidOrderByTimeDesc(uid);
+       return collectDao.findByUid(uid);
     }
 
-    public void addCollect(String uid, String aid) {
-        Collect collect = new Collect();
+    public void updateCollect(String uid, String aid) {
+        Collect oriCollect = collectDao.getCollect(uid, aid);
+        if (oriCollect == null) {
+            Collect collect = new Collect();
 
-        collect.setUid(uid);
-        collect.setAid(aid);
-        collect.setTime(System.currentTimeMillis());
-        collect.setState(1);
+            collect.setUid(uid);
+            collect.setAid(aid);
+            collect.setTime(System.currentTimeMillis());
+            collect.setState(1);
 
-        collectDao.save(collect);
+            collectDao.save(collect);
+        } else {
+            oriCollect.setTime(System.currentTimeMillis());
+            oriCollect.setState(0);
+            collectDao.save(oriCollect);
+        }
     }
 
 }

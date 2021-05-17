@@ -1,8 +1,6 @@
 package com.herycs.article.pojo;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @ClassName Collect
@@ -15,6 +13,7 @@ import javax.persistence.Table;
 @Table(name = "tb_collect")
 public class Collect {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String uid;
     private String aid;

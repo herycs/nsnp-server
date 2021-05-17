@@ -19,8 +19,8 @@ public interface MessageDao extends JpaRepository<Message, String> {
     @Query(value = "select * from tb_record where sender=? or sender=? order by time desc limit ?", nativeQuery = true)
     public List<Message> findByUserAndReceptor(String uid, String receptorId, int limit);
 
-    @Query(value = "select receptor from tb_record where sender=? group by receptor", nativeQuery = true)
-    List<String> findAllReceptor(String uid);
+    @Query(value = "select receptor from tb_record where sender=? and type=? group by receptor", nativeQuery = true)
+    List<String> findAllReceptor(String uid, String type);
 
     @Query(value = "select receptor from tb_record where receptor=? group by sender", nativeQuery = true)
     List<String> findAllSender(String uid);

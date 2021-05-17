@@ -32,7 +32,9 @@ public class CommunicateController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    private static final String MESSAGE_TYPE_NOTICE = "TO_PUBLIC";
+    private static final String SYSTEM_USER = "1386594177105661952";
+
+    private static final String MESSAGE_TYPE_NOTICE = "SYSTEM";
 
     private static final String MESSAGE_TYPE_USER = "TO_USER";
 
@@ -67,7 +69,8 @@ public class CommunicateController {
     public void toRoom(@Payload MessageDto messageDto) {
 
         logger.info("to public {}", messageDto);
-        messageDto.setType("TO_ROOM");
+        messageDto.setSender(SYSTEM_USER);
+        messageDto.setType(MESSAGE_TYPE_NOTICE);
 
         messageService.addRecord(messageDto);
         MessageDto m = new MessageDto("public", "来自群聊的消息");

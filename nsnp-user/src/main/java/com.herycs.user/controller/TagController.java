@@ -26,6 +26,7 @@ public class TagController {
     @Autowired
     private UserTagService userTagService;
 
+    // 获取用户标签
     @RequestMapping(value = "/{uid}", method = RequestMethod.GET)
     public List getUserTag(@PathVariable("uid") String uid) {
         List<UserTag> userTags = userTagService.findUserTags(uid);

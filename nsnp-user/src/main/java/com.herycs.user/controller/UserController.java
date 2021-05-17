@@ -17,12 +17,15 @@ import com.herycs.common.entity.PageResult;
 import com.herycs.common.entity.Result;
 import com.herycs.common.entity.StatusCode;
 import com.herycs.common.util.JwtUtil;
+import com.herycs.user.pojo.Message;
 import com.herycs.user.pojo.User;
 import com.herycs.user.pojo.UserTag;
 import com.herycs.user.service.FriendService;
+import com.herycs.user.service.MessageService;
 import com.herycs.user.service.UserService;
 import com.herycs.user.service.UserTagService;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +52,15 @@ public class UserController {
     private FriendService friendService;
 
     @Autowired
+    private MessageService messageService;
+
+    @Autowired
     private RedisTemplate redisTemplate;
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    private static final String NOTICE = "SYSTEM";
 
     /**
      * 更新好友粉丝数和用户关注数
@@ -129,9 +137,18 @@ public class UserController {
 //		if(!checkcodeRedis.equals(code)){
 //			return new Result(false, StatusCode.ERROR, "请输入正确的验证码");
 //		}
+
+
         userService.add(user);
 
         User userInfo = userService.findByPhone(user.getMobile());
+
+        Message message = new Message();
+        message.setReceptor(userInfo.getId());
+        message.setMsg("欢迎来到 星空社交平台，有问题可以联系我，也可以通过客服帮助找到我");
+        message.setTime(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()));
+        message.setType(NOTICE);
+        messageService.addRecord(message);
 
         return new Result(true, StatusCode.OK, "注册成功", createUserInfo(userInfo));
     }

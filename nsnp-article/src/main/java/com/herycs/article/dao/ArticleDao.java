@@ -28,6 +28,7 @@ public interface ArticleDao extends JpaRepository<Article,String>,JpaSpecificati
     @Query(value = "UPDATE tb_article SET thumbdown = thumbdown+1 WHERE id = ?", nativeQuery = true)
     public void updateThumbdown(String id);
 
+    @Query(value = "select * from tb_article where columnid=? and state = 1", nativeQuery = true)
     List<Article> findByColumnid(String columnid);
 
     @Modifying

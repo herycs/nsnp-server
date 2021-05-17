@@ -244,6 +244,14 @@ public class ArticleController {
         return new Result(true, StatusCode.OK, "获取成功", articles);
     }
 
+    @RequestMapping(value = "/collect/{aid}/{uid}", method = RequestMethod.GET)
+    public Result addUserCollect(@PathVariable("aid") String aid, @PathVariable("uid") String uid) {
+
+        collectService.updateCollect(uid, aid);
+
+        return new Result(true, StatusCode.OK, "增加收藏成功");
+    }
+
     /**
      * 获取用户访问记录
      */
@@ -307,7 +315,7 @@ public class ArticleController {
         for (int i = 0; i < columnId.size(); i++) {
             List<Article> recommand = articleService.getRecommand(columnId.get(i));
             logger.info("{}", recommand);
-            resList.addAll(recommand.subList(0, Math.min(3, recommand.size())));
+            resList.addAll(recommand.subList(0, Math.min(2, recommand.size())));
         }
 
         if (resList == null || resList.size() == 0) {
@@ -318,6 +326,14 @@ public class ArticleController {
         List<Article> hotList = articleService.getHotList();
 
         HashMap<String, List> resMap = new HashMap<>();
+
+        if (resList.size() > 3) {
+            resList = resList.subList(0, 3);
+        }
+        resList.forEach(article -> { // 避免重复推荐
+            article.setState("2");
+            articleService.update(article);
+        });
 
 
         resMap.put("recommend", parseArticle(resList));

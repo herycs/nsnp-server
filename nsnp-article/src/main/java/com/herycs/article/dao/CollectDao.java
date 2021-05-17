@@ -2,8 +2,8 @@ package com.herycs.article.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
-import com.herycs.article.pojo.Channel;
 import com.herycs.article.pojo.Collect;
 
 import java.util.List;
@@ -17,6 +17,10 @@ import java.util.List;
  **/
 public interface CollectDao extends JpaRepository<Collect,String>, JpaSpecificationExecutor<Collect> {
 
-    List<Collect> findByUidOrderByTimeDesc(String uid);
+    @Query(value = "select * from itaobaob_article.tb_collect where uid = ? and state = 1 group by aid order by time desc", nativeQuery = true)
+    List<Collect> findByUid(String uid);
+
+    @Query(value = "select * from itaobaob_article.tb_collect where uid=? and aid=?", nativeQuery = true)
+    Collect getCollect(String uid, String aid);
 
 }

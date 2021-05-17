@@ -35,7 +35,7 @@ public class ChatController {
     @Autowired
     private MessageService messageService;
 
-    private static final String MESSAGE_TYPE_NOTICE = "TO_PUBLIC";
+    private static final String MESSAGE_TYPE_NOTICE = "SYSTEM";
 
     private static final String MESSAGE_TYPE_USER = "TO_USER";
 
@@ -66,7 +66,7 @@ public class ChatController {
     @RequestMapping(value = "/list/notice/{uid}", method = RequestMethod.GET)
     public Result getNotice(@PathVariable("uid") String uid) {
 
-        List<String> allReceptor = messageService.getAllSender(uid);
+        List<Message> allReceptor = messageService.getAllSystemNotice(uid, MESSAGE_TYPE_NOTICE);
 
         logger.info("{}", allReceptor);
 
@@ -76,7 +76,7 @@ public class ChatController {
 
             HashMap<String, String> chatInfoMap = new HashMap<>();
 
-            User userInfo = userService.findById(item);
+            User userInfo = userService.findById(item.getSender());
 
 
             chatInfoMap.put("uid", userInfo.getId());
@@ -100,7 +100,7 @@ public class ChatController {
     @RequestMapping(value = "/list/{uid}", method = RequestMethod.GET)
     public Result getAllReceptors(@PathVariable("uid") String uid) {
 
-        List<String> allReceptor = messageService.getAllReceptor(uid);
+        List<String> allReceptor = messageService.getAllReceptor(uid, MESSAGE_TYPE_USER);
 
         logger.info("{}", allReceptor);
 

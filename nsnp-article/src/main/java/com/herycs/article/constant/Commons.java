@@ -14,7 +14,7 @@ public class Commons {
     public static final String FILE_SPEARATOR = ".";
 
     public static final String[] ALLOWED_EXTENSIONS = {
-            "jpg", "img", "png", "gif"
+            "jpg", "img", "png", "gif", "jpeg"
     };
 
     public static final int DEFAULT_FILE_NAME_LENGTH = 100;

@@ -42,12 +42,16 @@ public class MessageService {
         return messageDao.findAllSender(uid);
     }
 
-    public List<String> getAllReceptor(String uid) {
-        return messageDao.findAllReceptor(uid);
+    public List<String> getAllReceptor(String uid, String type) {
+        return messageDao.findAllReceptor(uid, type);
     }
 
     public Message getLastMessage(String uid, String receptor, String type) {
         return messageDao.findLastMessage(uid, receptor, type);
+    }
+
+    public List<Message> getAllSystemNotice(String uid, String type) {
+        return messageDao.findAllSystemNotice(uid, type);
     }
 
     public Message getSystemNotice(String uid, String type) {

@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.herycs.article.client.UserClient;
 import com.herycs.article.constant.Commons;
 import com.herycs.article.pojo.Source;
+import com.herycs.article.service.CollectService;
 import com.herycs.article.service.SourceService;
 import com.herycs.common.entity.Result;
 import com.herycs.common.entity.StatusCode;
@@ -40,10 +41,13 @@ public class FileController {
     private SourceService sourceService;
 
     @Autowired
+    private CollectService collectService;
+
+    @Autowired
     private UserClient userClient;
 
     @RequestMapping(value = "/{uid}", method = RequestMethod.GET)
-    public Result find(@PathVariable("uid") String uid) {
+    public Result findByUser(@PathVariable("uid") String uid) {
 
         List<Source> sourceList = sourceService.findByUser(uid);
         ArrayList<Map> resList = new ArrayList<>();
@@ -63,7 +67,22 @@ public class FileController {
 
     @RequestMapping(value = "/find/{name}", method = RequestMethod.GET)
     public Result findByName(@PathVariable("name") String name) {
-        return new Result(true, StatusCode.OK, "查找成功", sourceService.search(name));
+
+        List<Source> sourceList = sourceService.search(name);
+
+        ArrayList<Map> resList = new ArrayList<>();
+        sourceList.forEach(source -> {
+            HashMap<String, String> map = new HashMap<>();
+
+            map.put("name", source.getName());
+            map.put("updatetime", dataFormat.format(source.getUpdatetime()));
+            map.put("uploadtime", dataFormat.format(source.getUploadtime()));
+
+            resList.add(map);
+
+        });
+
+        return new Result(true, StatusCode.OK, "查找成功", resList);
     }
 
     @RequestMapping(value = "/del/{id}", method = RequestMethod.DELETE)
@@ -74,6 +93,13 @@ public class FileController {
         sourceService.update(source);
         return new Result(true, StatusCode.OK, "删除成功");
     }
+
+    @RequestMapping(value = "/source/{aid}/{uid}", method = RequestMethod.DELETE)
+    public Result collect(@PathVariable("aid") String aid, @PathVariable("uid") String uid) {
+        collectService.updateCollect(uid, aid);
+        return new Result(true, StatusCode.OK, "删除成功");
+    }
+
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public Result update(@RequestBody Source source) {

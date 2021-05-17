@@ -2,6 +2,7 @@ package com.herycs.article.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.herycs.article.dao.SourceDao;
 import com.herycs.article.pojo.Source;
@@ -36,6 +37,9 @@ public class SourceService {
     }
 
     public List<Source> search(String name) {
+        if (StringUtils.isEmpty(name)) {
+            return sourceDao.findAll();
+        }
         return sourceDao.findByName(name);
     }
 
